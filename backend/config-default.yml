@@ -1,0 +1,17 @@
+server:
+    hostname: 127.0.0.1
+    port: 3435
+
+database:
+    hostname: host.docker.internal
+    port: 5432
+    user: postgres
+    password: password
+    sslMode: false
+    timeZone: Asia/Shanghai
+
+Authorization:
+    # Generate a random secret-key by the following shell:
+    # $ echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null)
+    secret-key: XWpHQ0Q1fUM3H8M3ysmk
+    refresh-secret-key: tuiBz7zIUQYKii+ncBdt
