@@ -16,7 +16,13 @@ func routes(e *echo.Echo) {
 	e.Use(echoMiddleware.Recover())
 	e.Use(echoMiddleware.CORSWithConfig(echoMiddleware.CORSConfig{
 		AllowOrigins: []string{"*"},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowHeaders: []string{
+			echo.HeaderOrigin,
+			echo.HeaderContentType,
+			echo.HeaderAccept,
+			echo.HeaderAuthorization,
+		},
+		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE, echo.OPTIONS},
 	}))
 
 	apiVersionUrl := "/api/v1"
@@ -44,26 +50,4 @@ func routes(e *echo.Echo) {
 		collectionGroup.GET("/summary", controllers.CollectionSummaryGET, middleware.TokenVerificationMiddleware)
 		collectionGroup.GET("/tag", controllers.CollectionTagGET, middleware.TokenVerificationMiddleware)
 	}
-
-	// postGroup := e.Group(apiVersionUrl + "/post")
-	// {
-	// 	postGroup.POST("", controllers.PostPOST, middleware.TokenVerificationMiddleware)
-	// 	postGroup.POST("/", controllers.PostPOST, middleware.TokenVerificationMiddleware)
-	// 	postGroup.GET("", controllers.PostGET)
-	// 	postGroup.GET("/", controllers.PostGET)
-	// }
-
-	// locationGroup := e.Group(apiVersionUrl + "/location")
-	// {
-	// 	locationGroup.GET("", controllers.LocationGET)
-	// 	locationGroup.GET("/", controllers.LocationGET)
-	// 	locationGroup.POST("/scan", controllers.LocationScanPOST, middleware.TokenVerificationMiddleware)
-	// 	locationGroup.GET("/list", controllers.LocationListGET, middleware.TokenVerificationMiddleware)
-	// }
-
-	// shareGroup := e.Group(apiVersionUrl + "/share")
-	// {
-	// 	shareGroup.POST("", controllers.SharePOST, middleware.TokenVerificationMiddleware)
-	// 	shareGroup.POST("/", controllers.SharePOST, middleware.TokenVerificationMiddleware)
-	// }
 }

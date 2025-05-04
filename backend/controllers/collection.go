@@ -42,8 +42,12 @@ func CollectionListGET(c echo.Context) error {
 
 	// 解析请求参数
 	req := new(CollectionListRequest)
-	if err := c.Bind(req); err != nil {
-		return ResponseBadRequest(c, "Invalid request parameters", err)
+	
+	req.Search = c.QueryParam("search")
+	tagsParam := c.QueryParam("tags")
+	
+	if tagsParam != "" {
+			req.Tags = strings.Split(tagsParam, ",")
 	}
 
 	// 获取用户ID
@@ -190,9 +194,13 @@ func CollectionSummaryGET(c echo.Context) error {
 	logs.Debug("GET /collection/summary")
 
 	// 解析请求参数
-	req := new(CollectionSummaryRequest)
-	if err := c.Bind(req); err != nil {
-		return ResponseBadRequest(c, "Invalid request parameters", err)
+	req := new(CollectionListRequest)
+	
+	req.Search = c.QueryParam("search")
+	tagsParam := c.QueryParam("tags")
+	
+	if tagsParam != "" {
+			req.Tags = strings.Split(tagsParam, ",")
 	}
 
 	// 获取用户ID
