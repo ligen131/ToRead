@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ToRead</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1>ToRead</h1>
+    
+    <!-- 登录表单 -->
+    <div id="loginForm">
+      <h2>登录</h2>
+      <div class="form-group">
+        <label for="username">用户名:</label>
+        <input type="text" id="username" placeholder="输入用户名">
+      </div>
+      <div class="form-group">
+        <label for="password">密码:</label>
+        <input type="password" id="password" placeholder="输入密码">
+      </div>
+      <button id="loginBtn">登录</button>
+      <p id="loginMessage" class="message"></p>
+    </div>
+    
+    <!-- 已登录状态 -->
+    <div id="loggedInView" style="display: none;">
+      <div class="user-info">
+        <span id="userNameDisplay"></span>
+        <button id="logoutBtn">退出登录</button>
+      </div>
+      
+      <div id="statusMessage" class="message"></div>
+      
+      <div class="actions">
+        <div class="custom-url">
+          <h3>添加自定义链接</h3>
+          <input type="text" id="customUrl" placeholder="https://example.com">
+          <button id="saveCustomBtn">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
