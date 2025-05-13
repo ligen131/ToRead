@@ -15,3 +15,31 @@ Authorization:
     # $ echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null)
     secret-key: XWpHQ0Q1fUM3H8M3ysmk
     refresh-secret-key: tuiBz7zIUQYKii+ncBdt
+
+llmProcessor:
+  textProcessor:
+    enabled: true
+    apiEndpoint: "https://api.openai.com/v1/chat/completions"
+    apiKey: "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    model: "gpt-4o-mini"
+    prompt: "你是一位网页内容总结专家，你需要对用户给出的网页内容总结为标题（title）、内容介绍（description）和标签（tags），介绍应当由若干句话组成而非分点列出。你必须将结果通过调用 extract_content_summary 的 function 的形式给出。"
+    maxTokens: 1000
+    temperature: 0.3
+  
+  imageProcessor:
+    enabled: true
+    apiEndpoint: "https://api.openai.com/v1/chat/completions"
+    apiKey: "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    model: "gpt-4o-mini"
+    prompt: "你是一位网页内容总结专家，你需要对用户给出的网页内容总结为标题（title）、内容介绍（description）和标签（tags），介绍应当由若干句话组成而非分点列出。你必须将结果通过调用 extract_content_summary 的 function 的形式给出。"
+    maxTokens: 800
+    temperature: 0.4
+  
+  videoProcessor:
+    enabled: true
+    apiEndpoint: "https://api.openai.com/v1/chat/completions"
+    apiKey: "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    model: "gpt-4o-mini"
+    prompt: "你是一位网页内容总结专家，你需要对用户给出的网页内容总结为标题（title）、内容介绍（description）和标签（tags），介绍应当由若干句话组成而非分点列出。你必须将结果通过调用 extract_content_summary 的 function 的形式给出。"
+    maxTokens: 1200
+    temperature: 0.3

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"time"
 	"to-read/controllers/auth"
 	"to-read/model"
 	"to-read/shared/llmprocessor"
@@ -42,12 +43,12 @@ func CollectionListGET(c echo.Context) error {
 
 	// 解析请求参数
 	req := new(CollectionListRequest)
-	
+
 	req.Search = c.QueryParam("search")
 	tagsParam := c.QueryParam("tags")
-	
+
 	if tagsParam != "" {
-			req.Tags = strings.Split(tagsParam, ",")
+		req.Tags = strings.Split(tagsParam, ",")
 	}
 
 	// 获取用户ID
@@ -178,6 +179,40 @@ func CollectionAddPOST(c echo.Context) error {
 	return ResponseOK(c, resp)
 }
 
+// 不写数据库
+func CollectionGPOST(c echo.Context) error {
+	logs.Debug("POST /g")
+
+	collectionRequest := CollectionAddRequest{}
+	_ok, err := BindJSON(c, &collectionRequest)
+	if !_ok {
+		return err
+	}
+	url := collectionRequest.Url
+	if url == "" {
+		return ResponseBadRequest(c, "Url is required", nil)
+	}
+
+	processor := llmprocessor.NewLLMProcessor()
+	summary, err := processor.ProcessURLAuto(url)
+	if err != nil {
+		logs.Warn("Failed to process URL with LLM", zap.Error(err), zap.String("url", url))
+		return ResponseInternalServerError(c, "Failed to process URL with LLM", err)
+	}
+
+	resp := CollectionAddResponse{
+		CollectionID: 0,
+		Url:          url,
+		Type:         summary.Type,
+		Title:        summary.Title,
+		Description:  summary.Description,
+		Tags:         summary.Tags,
+		CreateAt:     time.Now().Unix(),
+	}
+
+	return ResponseOK(c, resp)
+}
+
 // CollectionSummaryRequest 收藏摘要请求
 type CollectionSummaryRequest struct {
 	Search string   `query:"search"`
@@ -195,12 +230,12 @@ func CollectionSummaryGET(c echo.Context) error {
 
 	// 解析请求参数
 	req := new(CollectionListRequest)
-	
+
 	req.Search = c.QueryParam("search")
 	tagsParam := c.QueryParam("tags")
-	
+
 	if tagsParam != "" {
-			req.Tags = strings.Split(tagsParam, ",")
+		req.Tags = strings.Split(tagsParam, ",")
 	}
 
 	// 获取用户ID

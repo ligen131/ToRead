@@ -158,7 +158,7 @@ func (p *LLMProcessor) fetchURLContent(url string) (string, error) {
 		req.Header.Set("Sec-Fetch-Site", "cross-site")
 		req.Header.Set("Sec-Fetch-Mode", "no-cors")
 		req.Header.Set("Sec-Fetch-Dest", "image")
-		req.Header.Set("Referer", "https://www.google.com/")
+		// req.Header.Set("Referer", "https://www.google.com/")
 
 		// 发送请求
 		resp, err := p.client.Do(req)
@@ -168,6 +168,8 @@ func (p *LLMProcessor) fetchURLContent(url string) (string, error) {
 		defer resp.Body.Close()
 
 		if resp.StatusCode != http.StatusOK {
+		data, _ := io.ReadAll(resp.Body)
+			logs.Info("Fetching image content failed", zap.String("url", url), zap.String("body", string(data)))
 			return "", fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 		}
 

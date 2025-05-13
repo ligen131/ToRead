@@ -12,59 +12,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// func checkUserName(userName string) error {
-// 	// if userName == "" {
-// 	// 	return errors.New("Empty user_name.")
-// 	// }
-
-// 	// result, _ := model.FindUserByName(userName)
-// 	// if result.UserName == userName {
-// 	// 	return errors.New("Username have been used.")
-// 	// }
-
-// 	return nil
-// }
-
-// func checkUserOpenID(openid string) error {
-// 	if openid == "" {
-// 		return errors.New("Empty openid.")
-// 	}
-
-// 	result, _ := model.FindUserByOpenID(openid)
-// 	if result.OpenID == openid {
-// 		return errors.New("OpenID have been registered.")
-// 	}
-
-// 	return nil
-// }
-
-// func FindUser(c echo.Context, request model.User) (user model.User, err error, isInternalServerError bool) {
-// 	user = request
-// 	if request.ID != 0 {
-// 		user, err = model.FindUserByID(request.ID)
-// 	} else if request.OpenID != "" {
-// 		user, err = model.FindUserByOpenID(request.OpenID)
-// 	} else {
-// 		return user, errors.New("User ID or openid is required."), false
-// 	}
-// 	if err != nil {
-// 		if err == gorm.ErrRecordNotFound {
-// 			return user, err, false
-// 		}
-// 		return user, ResponseInternalServerError(c, "Find user failed", err), true
-// 	}
-// 	return user, nil, false
-// }
-
-// func UserRegister(openID string) (model.User, error) {
-// 	err := checkUserOpenID(openID)
-// 	if err != nil {
-// 		return model.User{}, err
-// 	}
-
-// 	return model.UserRegister("", openID)
-// }
-
 type UserLoginRequest struct {
 	UserName string `json:"user_name"`
 	Password string `json:"password"`

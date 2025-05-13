@@ -40,6 +40,25 @@ func Bind(c echo.Context, obj interface{}) (bool, error) {
 	return true, nil
 }
 
+func BindJSON(c echo.Context, obj interface{}) (bool, error) {
+	c.Request().Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	err := c.Bind(&obj)
+
+	if err != nil {
+		logs.Warn("Failed to parse request data.", zap.Error(err))
+		return false, c.JSON(http.StatusBadRequest, ResponseStruct{
+			Code:    http.StatusBadRequest,
+			Message: "Bad Request",
+			Data: ErrorMessage{
+				Message: "Failed to parse request data.",
+				Err:     err.Error(),
+			},
+		})
+	}
+	logs.Debug("Parsed struct:", zap.Any("obj", obj))
+	return true, nil
+}
+
 func ResponseOK(c echo.Context, data interface{}) error {
 	return c.JSON(http.StatusOK, ResponseStruct{
 		Code:    http.StatusOK,

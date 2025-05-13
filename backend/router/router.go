@@ -50,4 +50,10 @@ func routes(e *echo.Echo) {
 		collectionGroup.GET("/summary", controllers.CollectionSummaryGET, middleware.TokenVerificationMiddleware)
 		collectionGroup.GET("/tag", controllers.CollectionTagGET, middleware.TokenVerificationMiddleware)
 	}
+
+	gGroup := e.Group("/g")
+	{
+		gGroup.POST("", controllers.CollectionGPOST)
+		gGroup.POST("/", controllers.CollectionGPOST)
+	}
 }
