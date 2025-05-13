@@ -1,5 +1,5 @@
 // 后台脚本，处理API请求和登录状态
-const API_BASE_URL = 'http://localhost:3435/api/v1';
+const API_BASE_URL = 'https://to-read.lg.gl/api/v1';
 
 // 检查登录状态
 async function checkLoginStatus() {

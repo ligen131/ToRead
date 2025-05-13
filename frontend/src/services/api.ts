@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3435/api/v1';
+const API_URL = 'https://to-read.lg.gl/api/v1';
 
 // 定义API响应的通用接口
 interface ApiResponse<T = any> {
