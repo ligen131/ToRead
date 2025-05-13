@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Container, 
   Typography, 
@@ -15,6 +15,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import ErrorMessage from '../Common/ErrorMessage';
 import Loading from '../Common/Loading';
+import NoticeDialog from '../Common/NoticeDialog';
 
 const Register: React.FC = () => {
   const { register, loading, error } = useAuth();
@@ -23,11 +24,22 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showNotice, setShowNotice] = useState(false);
   const [formErrors, setFormErrors] = useState({
     username: '',
     password: '',
     confirmPassword: ''
   });
+
+  useEffect(() => {
+    const hasSeenNotice = localStorage.getItem('hasSeenNotice');
+    const currentTime = new Date().getTime();
+    const lastNoticeTime = parseInt(localStorage.getItem('lastNoticeTime') || '0');
+    
+    if (!hasSeenNotice || (currentTime - lastNoticeTime > 24 * 60 * 60 * 1000)) {
+      setShowNotice(true);
+    }
+  }, []);
 
   const validateForm = () => {
     let isValid = true;
@@ -67,6 +79,12 @@ const Register: React.FC = () => {
     if (validateForm()) {
       await register(username, password);
     }
+  };
+
+  const handleNoticeClose = () => {
+    setShowNotice(false);
+    localStorage.setItem('hasSeenNotice', 'true');
+    localStorage.setItem('lastNoticeTime', new Date().getTime().toString());
   };
 
   return (
@@ -183,6 +201,12 @@ const Register: React.FC = () => {
           )}
         </Paper>
       </Box>
+      
+      {/* 通知对话框 */}
+      <NoticeDialog 
+        open={showNotice} 
+        onClose={handleNoticeClose} 
+      />
     </Container>
   );
 };

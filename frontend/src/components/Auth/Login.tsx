@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Container, 
   Typography, 
@@ -15,16 +15,28 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import ErrorMessage from '../Common/ErrorMessage';
 import Loading from '../Common/Loading';
+import NoticeDialog from '../Common/NoticeDialog';
 
 const Login: React.FC = () => {
   const { login, loading, error } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showNotice, setShowNotice] = useState(false);
   const [formErrors, setFormErrors] = useState({
     username: '',
     password: ''
   });
+
+  useEffect(() => {
+    const hasSeenNotice = localStorage.getItem('hasSeenNotice');
+    const currentTime = new Date().getTime();
+    const lastNoticeTime = parseInt(localStorage.getItem('lastNoticeTime') || '0');
+    
+    if (!hasSeenNotice || (currentTime - lastNoticeTime > 24 * 60 * 60 * 1000)) {
+      setShowNotice(true);
+    }
+  }, []);
 
   const validateForm = () => {
     let isValid = true;
@@ -52,6 +64,12 @@ const Login: React.FC = () => {
     if (validateForm()) {
       await login(username, password);
     }
+  };
+
+  const handleNoticeClose = () => {
+    setShowNotice(false);
+    localStorage.setItem('hasSeenNotice', 'true');
+    localStorage.setItem('lastNoticeTime', new Date().getTime().toString());
   };
 
   return (
@@ -142,6 +160,12 @@ const Login: React.FC = () => {
           )}
         </Paper>
       </Box>
+      
+      {/* 通知对话框 */}
+      <NoticeDialog 
+        open={showNotice} 
+        onClose={handleNoticeClose} 
+      />
     </Container>
   );
 };
